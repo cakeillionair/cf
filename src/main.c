@@ -14,7 +14,7 @@
 #include "dirl.h"
 #include "list.h"
 
-// TODO add_more_file_types add_color
+// TODO add_more_file_types add_color add_max_depth add_regex
 
 int main(int argc, char *argv[]) {
     List *folderList = emptyList();

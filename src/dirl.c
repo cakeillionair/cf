@@ -4,6 +4,11 @@ long countFiles(char *path, flag_t flags) {
     List *dirList = emptyList();
     long count = 0;
 
+    if (!access(path, R_OK)) {
+        printf("Error: access to '%s' denied");
+        free(dirList);
+        return -1;
+    }
     DIR *dir = opendir(path);
     struct dirent *entry;
 
@@ -29,7 +34,7 @@ long countFiles(char *path, flag_t flags) {
                 if (CHECKFLAG(flags, LIST_FILES)) printf("  %s/%s\n", path, entry->d_name);
             }break;
             default: {
-                if (!CHECKFLAG(flags, COUNT_ALL)) break;
+                if (!CHECKFLAG(flags, COUNT_REST)) break;
                 count++;
                 if (CHECKFLAG(flags, LIST_FILES)) printf("  %s/%s\n", path, entry->d_name);
             }break;

@@ -13,8 +13,8 @@ void usage(char *arg0) {
         "                             can be combined with other file types such as -d"            "\n"
         "  -l, --list                 lists files that are counted"                                "\n"
         "  -q, --quiet                only prints the total amount counted and nothing else"       "\n"
-        "  -r, --realpath             prints the real paths of files and directories"              "\n"
-        "  -R, --recursive            counts files in subdirectories recursively"                  "\n"
+        "  -r, --recursive            counts files in subdirectories recursively"                  "\n"
+        "  -p, --realpath             prints the real paths of files and directories"              "\n"
         "      --help                 display this help and exit"                                  "\n"
         ""                                                                                         "\n"
         "Color is not supported at the moment"                                                     "\n"
@@ -67,10 +67,10 @@ flag_t parseFlag(char *flag, flag_t *flags) {
 
     for (int i = 1; flag[i] != '\0'; i++) {
         switch (flag[i]) {
-            case 'R': {
+            case 'r': {
                 newflags |= RECURSIVE;
             }break;
-            case 'r': {
+            case 'p': {
                 newflags |= REALPATH;
             }break;
             case 'a': {
@@ -78,10 +78,11 @@ flag_t parseFlag(char *flag, flag_t *flags) {
             }break;
             case 'd': {
                 newflags |= COUNT_DIRS;
-                *flags &= ~(COUNT_FILES);
+                *flags &= ~(COUNT_ALL);
             }break;
             case 'f': {
                 newflags |= COUNT_FILES;
+                *flags &= ~(COUNT_ALL);
             }break;
             case 'q': {
                 newflags |= QUIET;
