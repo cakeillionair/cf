@@ -5,7 +5,7 @@ long countFiles(char *path, flag_t flags) {
     long count = 0;
 
     if (!access(path, R_OK)) {
-        printf("Error: access to '%s' denied");
+        printf("Error: access to '%s' denied", path);
         free(dirList);
         return -1;
     }
