@@ -27,7 +27,7 @@ typedef uint32_t flag_t;
  * @brief checks flag
  * @param flags is a flag_t struct
  * @param name is the name of the flag
- * @return whether or not the flag is activated
+ * @return true if the flag is activated and false otherwise
  */
 #define CHECKFLAG(flags, name) (((flags) & (name)) != 0)
 

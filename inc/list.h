@@ -33,7 +33,7 @@ typedef struct List {
 /**
  * @brief checks whether the field "current" of a list is not NULL
  * @param list is a pointer to the List struct
- * @return whether or not "current" is not NULL
+ * @return true if "current" is not NULL and false otherwise
  */
 #define hasAccess(list) ((list)->current != NULL)
 
