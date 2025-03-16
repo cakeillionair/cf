@@ -40,14 +40,16 @@ char *fmtinfo(char *path, char *file, char *buf, bool color) {
     bool executable = (statbuf.st_mode & 0111);
 
     sprintf(buf,
-        "%s%s%s"" ""%d %d"" ""% 9ld"" ""%s"" ""%s%s%s""%c\n"
-        , (color) ? RED_F : ""
+        "%s%s"" ""%s%d %d"" ""%s% 9ld"" ""%s%s"" ""%s%s%s""%c\n"
+        , (color) ? MAGENTA_F : ""
         , mode
-        , (color) ? WHITE_F : ""
+        , (color) ? CYAN_F : ""
         , statbuf.st_uid, statbuf.st_gid
+        , (color) ? MAGENTA_F : ""
         , statbuf.st_size
+        , (color) ? CYAN_F : ""
         , time
-        , (color) ? ((isdir) ? BLUE_F : (executable ? GREEN_F : YELLOW_F)) : ""
+        , (color) ? ((isdir) ? BLUE_F : (executable ? GREEN_F : WHITE_F)) : ""
         , file
         , (color) ? DEFAULT_F : ""
         , (isdir) ? '/' : (executable ? '*' : ' ')
