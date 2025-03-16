@@ -10,7 +10,7 @@
 /**
  * @brief character used for patterns
  */
-#define WILD '+'
+#define WILD '*'
 
 /**
  * @brief checks whether a string is a pattern

@@ -32,7 +32,7 @@ CLEAN_LIST     := \
 	$(TARGET_DEBUG) \
 	$(DISTCLEAN_LIST)
 
-default: cleanbuild
+default: makedir all debug
 
 $(TARGET): $(OBJ)
 	$(CC) $(CFLAGS) -o $@ $^ -I $(INC_PATH)

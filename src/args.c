@@ -1,10 +1,10 @@
 #include "args.h"
 
-#define VERSION "1.2.0"
+#define VERSION "1.2.1"
 
 void usage(char *arg0) {
     printf(
-        "Usage: %s [OPTION]... [DIRECTORY]..."                                                     "\n"
+        "Usage: %s [OPTION]... [DIRECTORY]... [PATTERN]..."                                        "\n"
         "Counts the amount of regular files in the DIRECTORYs (the current directory by default)." "\n"
         ""                                                                                         "\n"
         "  -a, --all                  count all files (excluding . and ..)"                        "\n"
@@ -19,10 +19,13 @@ void usage(char *arg0) {
         ""                                                                                         "\n"
         "Color is not supported at the moment"                                                     "\n"
         ""                                                                                         "\n"
+        "If a PATTERN (or multiple) is given, only file that fit the pattern are counted."         "\n"
+        "To create a pattern use the character '%c' as a wildcard."                                "\n"
+        ""                                                                                         "\n"
         "Exit status:"                                                                             "\n"
         " 0  if Ok,"                                                                               "\n"
         " 1  if error."                                                                            "\n"
-        , arg0
+        , arg0, WILD
     );
 }
 
