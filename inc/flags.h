@@ -9,7 +9,7 @@ typedef enum Flag {
     QUIET = 04,
     COUNT_FILES = 010,
     COUNT_DIRS = 020,
-    COUNT_REST = 030,
+    COUNT_REST = 040,
     COUNT_ALL = 070,
     REALPATH = 0100,
     ERROR = 01000
