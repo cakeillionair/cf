@@ -11,6 +11,7 @@
 #include <string.h>
 #include <unistd.h>
 
+#include "info.h"
 #include "list.h"
 #include "flags.h"
 #include "wild.h"

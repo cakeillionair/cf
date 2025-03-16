@@ -1,7 +1,7 @@
 /**
  * @author Jan Breithaupt
  * @date 15-03-2025
- * @version 1.2.1
+ * @version 1.3.0
  * @brief this program counts how many files are in a directory
  */
 
@@ -14,7 +14,7 @@
 #include "dirl.h"
 #include "list.h"
 
-// TODO add_more_file_types add_color add_max_depth add_file_information
+// TODO add_more_file_types add_color add_max_depth add_file_information count_files_and_dirs_seperately
 
 int main(int argc, char *argv[]) {
     List *folderList = emptyList();

@@ -13,6 +13,7 @@ typedef enum Flag {
     COUNT_ALL = 070,
     REALPATH = 0100,
     PATTERN = 0200,
+    COLOR = 0400,
     ERROR = 01000
 } Flag;
 
@@ -21,7 +22,7 @@ typedef uint32_t flag_t;
 /**
  * @brief default flags for the program
  */
-#define DEFAULT_FLAGS (COUNT_FILES | COUNT_DIRS)
+#define DEFAULT_FLAGS (COUNT_FILES | COUNT_DIRS | LIST_FILES)
 
 /**
  * @brief checks flag

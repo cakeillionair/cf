@@ -14,11 +14,13 @@ long countFiles(char *path, flag_t flags, List *patterns) {
 
     if (CHECKFLAG(flags, LIST_FILES)) printf("%s:\n", path);
     while ((entry = readdir(dir)) != NULL) {
+        bool counts = false;
+
         switch (entry->d_type) {
             case DT_DIR: {
                 if ((strcmp(".", entry->d_name) == 0) || (strcmp("..", entry->d_name) == 0)) break;
                 if (CHECKFLAG(flags, COUNT_DIRS)) {
-                    bool counts = true;
+                    counts = true;
                     if (CHECKFLAG(flags, PATTERN)) {
                         counts = false;
                         foreach(patterns) {
@@ -28,10 +30,7 @@ long countFiles(char *path, flag_t flags, List *patterns) {
                             }
                         }
                     }
-                    if (counts) {
-                        count++;
-                        if (CHECKFLAG(flags, LIST_FILES)) printf("  %s/%s/\n", path, entry->d_name);
-                    }
+                    if (counts) count++;
                 }
 
                 if (!CHECKFLAG(flags, RECURSIVE)) break;
@@ -42,7 +41,7 @@ long countFiles(char *path, flag_t flags, List *patterns) {
             }break;
             case DT_REG: {
                 if (!CHECKFLAG(flags, COUNT_FILES)) break;
-                bool counts = true;
+                counts = true;
                 if (CHECKFLAG(flags, PATTERN)) {
                     counts = false;
                     foreach(patterns) {
@@ -52,14 +51,11 @@ long countFiles(char *path, flag_t flags, List *patterns) {
                         }
                     }
                 }
-                if (counts) {
-                    count++;
-                    if (CHECKFLAG(flags, LIST_FILES)) printf("  %s/%s\n", path, entry->d_name);
-                }
+                if (counts) count++;
             }break;
             default: {
                 if (!CHECKFLAG(flags, COUNT_REST)) break;
-                bool counts = true;
+                counts = true;
                 if (CHECKFLAG(flags, PATTERN)) {
                     counts = false;
                     foreach (patterns) {
@@ -69,11 +65,14 @@ long countFiles(char *path, flag_t flags, List *patterns) {
                         }
                     }
                 }
-                if (counts) {
-                    count++;
-                    if (CHECKFLAG(flags, LIST_FILES)) printf("  %s/%s\n", path, entry->d_name);
-                }
+                if (counts) count++;
             }break;
+        }
+
+        if (counts && CHECKFLAG(flags, LIST_FILES)) {
+            char buf[128];
+
+            printf("%s", fmtinfo(path, entry->d_name, buf, CHECKFLAG(flags, COLOR)));
         }
     }
 
