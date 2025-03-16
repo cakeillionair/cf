@@ -16,6 +16,12 @@
 #include "flags.h"
 #include "wild.h"
 
+typedef struct Count {
+    long dirs;
+    long files;
+    long other;
+} Count;
+
 /**
  * @brief counts files in a directory
  * @param path is the path of the directory
@@ -23,6 +29,6 @@
  * @param patterns is a pointer to a list containing patterns
  * @return the amount of files in a directory
  */
-long countFiles(char *path, flag_t flags, List *patterns);
+int countFiles(char *path, flag_t flags, List *patterns, Count *result);
 
 #endif

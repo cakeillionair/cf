@@ -1,8 +1,10 @@
 #include "dirl.h"
 
-long countFiles(char *path, flag_t flags, List *patterns) {
+int countFiles(char *path, flag_t flags, List *patterns, Count *result) {
     List *dirList = emptyList();
-    long count = 0;
+    result->dirs = 0;
+    result->files = 0;
+    result->other = 0;
 
     if (access(path, R_OK | X_OK) != 0) {
         printf("Error: access to '%s' denied\n", path);
@@ -30,7 +32,7 @@ long countFiles(char *path, flag_t flags, List *patterns) {
                             }
                         }
                     }
-                    if (counts) count++;
+                    if (counts) result->dirs++;
                 }
 
                 if (!CHECKFLAG(flags, RECURSIVE)) break;
@@ -51,7 +53,7 @@ long countFiles(char *path, flag_t flags, List *patterns) {
                         }
                     }
                 }
-                if (counts) count++;
+                if (counts) result->files++;
             }break;
             default: {
                 if (!CHECKFLAG(flags, COUNT_REST)) break;
@@ -65,7 +67,7 @@ long countFiles(char *path, flag_t flags, List *patterns) {
                         }
                     }
                 }
-                if (counts) count++;
+                if (counts) result->other++;
             }break;
         }
 
@@ -76,22 +78,30 @@ long countFiles(char *path, flag_t flags, List *patterns) {
         }
     }
 
-    if (!CHECKFLAG(flags, QUIET) && CHECKFLAG(flags, LIST_FILES)) printf("count - %ld\n\n", count);
+    if (!CHECKFLAG(flags, QUIET) && CHECKFLAG(flags, LIST_FILES)) printf("- directories - %ld\n- files - %ld\n- other %ld\n\n"
+        , result->dirs, result->files, result->other);
 
     if (CHECKFLAG(flags, RECURSIVE)) {
         char *newpath = pop(dirList);
+        Count newCount;
+
         while (newpath != NULL) {
-            long newcount = countFiles(newpath, flags, patterns);
-            if (newcount != -1) count += newcount;
+            if (countFiles(newpath, flags, patterns, &newCount) == 0) {
+                result->dirs += newCount.dirs;
+                result->files += newCount.files;
+                result->other += newCount.other;
+            }
             free(newpath);
             newpath = pop(dirList);
         }
     }
     free(dirList);
 
-    if (!CHECKFLAG(flags, QUIET) && !CHECKFLAG(flags, LIST_FILES)) printf("%s - %ld\n\n", path, count);
+    if (!CHECKFLAG(flags, QUIET) && !CHECKFLAG(flags, LIST_FILES)) {
+        printf("%s:\n- directories - %ld\n- files - %ld\n- other - %ld\n", path, result->dirs, result->files, result->other);
+    }
 
     closedir(dir);
 
-    return count;
+    return 0;
 }
