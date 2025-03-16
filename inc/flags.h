@@ -12,6 +12,7 @@ typedef enum Flag {
     COUNT_REST = 040,
     COUNT_ALL = 070,
     REALPATH = 0100,
+    PATTERN = 0200,
     ERROR = 01000
 } Flag;
 

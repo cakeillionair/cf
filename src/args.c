@@ -1,6 +1,6 @@
 #include "args.h"
 
-#define VERSION "1.0.0"
+#define VERSION "1.2.0"
 
 void usage(char *arg0) {
     printf(
@@ -34,7 +34,7 @@ void version() {
     );
 }
 
-flag_t parseArgs(int argc, char *argv[], List *folders) {
+flag_t parseArgs(int argc, char *argv[], List *folders, List *patterns) {
     flag_t flags = 0;
     flag_t defaults = DEFAULT_FLAGS;
     
@@ -42,12 +42,17 @@ flag_t parseArgs(int argc, char *argv[], List *folders) {
         char *arg = argv[i];
 
         if (arg[0] == '-' && arg[1] == '-') {
-            flags |= parseLongFlag(argv[0], arg, &defaults, folders);
+            flags |= parseLongFlag(argv[0], arg, &defaults);
             if (CHECKFLAG(defaults, ERROR)) return flags;
         } else if (arg[0] == '-') {
             flags |= parseFlag(arg, &defaults);
             if (CHECKFLAG(defaults, ERROR)) return flags;
         } else {
+            if (isWild(arg)) {
+                listAppend(patterns, arg);
+                continue;
+            }
+
             DIR *dir = opendir(arg);
             if (dir == NULL) {
                 printf("Error: could not open folder \"%s\"\n", arg);
@@ -101,18 +106,14 @@ flag_t parseFlag(char *flag, flag_t *flags) {
     return newflags;
 }
 
-flag_t parseLongFlag(char *arg0, char *flag, flag_t *flags, List *folderList) {
+flag_t parseLongFlag(char *arg0, char *flag, flag_t *flags) {
     flag_t newflags = 0;
 
     if (strcmp(flag + 2, "help") == 0) {
         usage(arg0);
-        freeList(folderList);
-        free(folderList);
         exit(0);
     } else if (strcmp(flag + 2, "version") == 0) {
         version();
-        freeList(folderList);
-        free(folderList);
         exit(0);
     } else if (strcmp(flag + 2, "recursive") == 0) {
         newflags = RECURSIVE;

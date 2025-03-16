@@ -18,26 +18,30 @@
 
 int main(int argc, char *argv[]) {
     List *folderList = emptyList();
+    List *patternList = emptyList();
 
-    flag_t flags = parseArgs(argc, argv, folderList);
+    flag_t flags = parseArgs(argc, argv, folderList, patternList);
     if (flags == ERROR) return EXIT_FAILURE;
     if (CHECKFLAG(flags, QUIET) && CHECKFLAG(flags, LIST_FILES)) flags &= ~(LIST_FILES);
+    if (patternList->size != 0) flags |= PATTERN;
 
     long count = 0;
-    if (folderList->size == 0) listAppend(folderList, ".");
+    if (folderList->size == 0 && !CHECKFLAG(flags, ERROR)) listAppend(folderList, ".");
     foreach(folderList) {
         char *path = folderList->current->val;
         if (CHECKFLAG(flags, REALPATH)) {
             path = realpath(path, NULL);
         }
-        count += countFiles(path, flags);
+        count += countFiles(path, flags, patternList);
         if (CHECKFLAG(flags, REALPATH)) free(path);
     }
 
-    if (CHECKFLAG(flags, QUIET)) printf("count - %ld\n", count);
+    if (CHECKFLAG(flags, QUIET) || CHECKFLAG(flags, LIST_FILES)) printf("total - %ld\n", count);
 
     freeList(folderList);
     free(folderList);
+    freeList(patternList);
+    free(patternList);
 
     return CHECKFLAG(flags, ERROR);
 }
