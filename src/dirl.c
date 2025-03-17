@@ -11,7 +11,15 @@ int countFiles(char *path, flag_t flags, List *patterns, Count *result) {
         free(dirList);
         return -1;
     }
+
     DIR *dir = opendir(path);
+
+    if (dir == NULL) {
+        printf("Error: access to '%s' denied\n", path);
+        free(dirList);
+        return -1;
+    }
+
     struct dirent *entry;
 
     if (CHECKFLAG(flags, LIST_FILES)) printf("%s:\n", path);

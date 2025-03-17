@@ -5,7 +5,9 @@ CFLAGS   := \
 	-std=c99
 DBGFLAGS := \
 	-fsanitize=address \
-	-DDEBUG
+	-DDEBUG \
+	-g \
+	-Og
 CCFLAGS  := $(CFLAGS) -c
 
 BIN_PATH := bin

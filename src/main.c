@@ -1,7 +1,7 @@
 /**
  * @author Jan Breithaupt
  * @date 15-03-2025
- * @version 1.3.5
+ * @version 1.3.6
  * @brief this program counts how many files are in a directory
  */
 
