@@ -19,6 +19,7 @@
 typedef struct Count {
     long dirs;
     long files;
+    long links;
     long other;
 } Count;
 
@@ -27,8 +28,9 @@ typedef struct Count {
  * @param path is the path of the directory
  * @param flags gives more control over the behaviour
  * @param patterns is a pointer to a list containing patterns
+ * @param depth is the maximum depth when counting recursively
  * @return the amount of files in a directory
  */
-int countFiles(char *path, flag_t flags, List *patterns, Count *result);
+int countFiles(char *path, flag_t flags, List *patterns, Count *result, int depth);
 
 #endif

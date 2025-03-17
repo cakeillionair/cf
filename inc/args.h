@@ -16,9 +16,10 @@
  * @param argv is an array of arguments
  * @param folders is a pointer to a list of folders
  * @param patterns is a pointer to a list of patterns
+ * @param maxdepth is a pointer to store the max depth for recursion
  * @return the parsed flags in a flag_t struct
  */
-flag_t parseArgs(int argc, char *argv[], List *folders, List *patterns);
+flag_t parseArgs(int argc, char *argv[], List *folders, List *patterns, int *maxdepth);
 
 /**
  * @brief parses flags from a string
@@ -33,8 +34,9 @@ flag_t parseFlag(char *flag, flag_t *flags);
  * @param arg0 is the name of the program
  * @param flag is a char pointer pointing to the string
  * @param flags is a pointer to a flag_t struct with the default flags
+ * @param maxdepth is a pointer to store the max depth for recursion
  * @return the parsed flag in a flag_t struct
  */
-flag_t parseLongFlag(char *arg0, char *flag, flag_t *flags);
+flag_t parseLongFlag(char *arg0, char *flag, flag_t *flags, int *maxdepth);
 
 #endif

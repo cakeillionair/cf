@@ -1,6 +1,6 @@
 #include "args.h"
 
-#define VERSION "1.3.6"
+#define VERSION "1.4.0"
 
 void usage(char *arg0) {
     printf(
@@ -16,6 +16,8 @@ void usage(char *arg0) {
         "  -l, --list                 lists files that are counted"                                "\n"
         "  -q, --quiet                only prints the total amount counted and nothing else"       "\n"
         "  -r, --recursive            counts files in subdirectories recursively"                  "\n"
+        "      --max-depth=<NUM>      decides the maximum depth for recursion"                     "\n"
+        "                             no recursion means max-depth=0"                              "\n"
         "  -p, --realpath             prints the real paths of files and directories"              "\n"
         "      --help                 display this help and exit"                                  "\n"
         ""                                                                                         "\n"
@@ -39,7 +41,7 @@ void version() {
     );
 }
 
-flag_t parseArgs(int argc, char *argv[], List *folders, List *patterns) {
+flag_t parseArgs(int argc, char *argv[], List *folders, List *patterns, int *maxdepth) {
     flag_t flags = 0;
     flag_t defaults = DEFAULT_FLAGS;
     if (isatty(STDOUT_FILENO)) defaults |= COLOR;
@@ -48,7 +50,7 @@ flag_t parseArgs(int argc, char *argv[], List *folders, List *patterns) {
         char *arg = argv[i];
 
         if (arg[0] == '-' && arg[1] == '-') {
-            flags |= parseLongFlag(argv[0], arg, &defaults);
+            flags |= parseLongFlag(argv[0], arg, &defaults, maxdepth);
             if (CHECKFLAG(defaults, ERROR)) return flags;
         } else if (arg[0] == '-') {
             flags |= parseFlag(arg, &defaults);
@@ -115,7 +117,7 @@ flag_t parseFlag(char *flag, flag_t *flags) {
     return newflags;
 }
 
-flag_t parseLongFlag(char *arg0, char *flag, flag_t *flags) {
+flag_t parseLongFlag(char *arg0, char *flag, flag_t *flags, int *maxdepth) {
     flag_t newflags = 0;
 
     if (strcmp(flag + 2, "help") == 0) {
@@ -143,6 +145,12 @@ flag_t parseLongFlag(char *arg0, char *flag, flag_t *flags) {
         newflags = COLOR;
     } else if (strcmp(flag + 2, "no-color") == 0) {
         *flags &= ~(COLOR);
+    } else if (strncmp(flag + 2, "max-depth=", 10) == 0) {
+        if (sscanf(flag + 12, "%d", maxdepth) != 1) {
+            printf("Error: unknown option after --max-depth=\n");
+            *flags = ERROR;
+            return ERROR;
+        }
     } else {
         printf("Error: unknown flag - '%s'\n", flag + 2);
         *flags = ERROR;
