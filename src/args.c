@@ -1,6 +1,6 @@
 #include "args.h"
 
-#define VERSION "1.3.2"
+#define VERSION "1.3.3"
 
 void usage(char *arg0) {
     printf(

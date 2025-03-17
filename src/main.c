@@ -1,7 +1,7 @@
 /**
  * @author Jan Breithaupt
  * @date 15-03-2025
- * @version 1.3.2
+ * @version 1.3.3
  * @brief this program counts how many files are in a directory
  */
 
@@ -14,7 +14,7 @@
 #include "dirl.h"
 #include "list.h"
 
-// TODO add_more_file_types add_max_depth clean_up_flags
+// TODO add_more_file_types add_max_depth clean_up_flags fix_patterns
 
 int main(int argc, char *argv[]) {
     List *folderList = emptyList();
@@ -26,6 +26,10 @@ int main(int argc, char *argv[]) {
     if (patternList->size != 0) flags |= PATTERN;
 
     Count result, tmp;
+    result.dirs = 0;
+    result.files = 0;
+    result.other = 0;
+
     if (folderList->size == 0 && !CHECKFLAG(flags, ERROR)) listAppend(folderList, ".");
     foreach(folderList) {
         char *path = folderList->current->val;
