@@ -17,8 +17,31 @@ char *fmtinfo(char *path, char *file, char *buf, bool color) {
         return buf;
     }
     
+    char *file_color;
+
     char mode[11];
-    mode[0] = S_ISDIR(statbuf.st_mode) ? 'd' : FILLER;
+    mode[0] = FILLER;
+    bool special = false;
+    if (S_ISDIR(statbuf.st_mode)) {
+        mode[0] = 'd';
+        file_color = BLUE_F;
+        special = true;
+    }
+    if (S_ISLNK(statbuf.st_mode)) {
+        mode[0] = 'l';
+        file_color = CYAN_F;
+        special = true;
+    }
+    if (S_ISBLK(statbuf.st_mode)) {
+        mode[0] = 'b';
+        file_color = YELLOW_F;
+        special = true;
+    }
+    if (S_ISCHR(statbuf.st_mode)) {
+        mode[0] = 'c';
+        file_color = YELLOW_F;
+        special = true;
+    }
 	
 	mode[1] = (statbuf.st_mode & 0400) ? 'r' : FILLER;
 	mode[2] = (statbuf.st_mode & 0200) ? 'w' : FILLER;
@@ -49,10 +72,10 @@ char *fmtinfo(char *path, char *file, char *buf, bool color) {
         , statbuf.st_size
         , (color) ? CYAN_F : ""
         , time
-        , (color) ? ((isdir) ? BLUE_F : (executable ? GREEN_F : WHITE_F)) : ""
+        , (color) ? ((special) ? file_color : (executable ? GREEN_F : WHITE_F)) : ""
         , file
         , (color) ? DEFAULT_F : ""
-        , (isdir) ? '/' : (executable ? '*' : ' ')
+        , (special) ? (isdir ? '/' : ' ') : (executable ? '*' : ' ')
     );
 
     return buf;
