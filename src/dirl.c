@@ -72,7 +72,7 @@ int countFiles(char *path, flag_t flags, List *patterns, Count *result) {
         }
 
         if (counts && CHECKFLAG(flags, LIST_FILES)) {
-            char buf[128];
+            char buf[PATH_MAX * 2];
 
             printf("%s", fmtinfo(path, entry->d_name, buf, CHECKFLAG(flags, COLOR)));
         }
