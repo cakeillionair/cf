@@ -7,7 +7,7 @@ char *fmtinfo(char *path, char *file, char *buf, bool color) {
 
     char fullpath[PATH_MAX];
     sprintf(fullpath, "%s/%s", path, file);
-    if (stat(fullpath, &statbuf) != 0) {
+    if (lstat(fullpath, &statbuf) != 0) {
         sprintf(buf,
             "%sxxxxxxxxxx xxxx xxxx xxxxxxxxx xxxx xxx xx %s%s\n"
             , (color) ? RED_F : ""
@@ -63,18 +63,21 @@ char *fmtinfo(char *path, char *file, char *buf, bool color) {
     bool executable = (statbuf.st_mode & 0111);
 
     sprintf(buf,
-        "%s%s"" ""%s% 4d % 4d"" ""%s% 9ld"" ""%s%s"" ""%s%s%s""%c\n"
-        , (color) ? MAGENTA_F : ""
+        "%s%s"" ""%s% 2ld"" ""%s% 4d % 4d"" ""%s% 9ld%s"" ""%s%s"" ""%s%s%s""%c\n"
+        , (color) ? RGB_B(40, 40, 40) RGB_F(255, 89, 94) : ""
         , mode
-        , (color) ? CYAN_F : ""
+        , (color) ? RGB_F(255, 146, 76) : ""
+        , statbuf.st_nlink
+        , (color) ? RGB_F(255, 202, 58) : ""
         , statbuf.st_uid, statbuf.st_gid
-        , (color) ? MAGENTA_F : ""
+        , (color) ? RGB_F(138, 201, 38) : ""
         , statbuf.st_size
-        , (color) ? CYAN_F : ""
+        , (color) ? RGB_F(25, 130, 196) : ""
         , time
+        , (color) ? DEFAULT_B RGB_F(40, 40, 40) "\u258C" BRIGHT : ""
         , (color) ? ((special) ? file_color : (executable ? GREEN_F : WHITE_F)) : ""
         , file
-        , (color) ? DEFAULT_F : ""
+        , (color) ? RESET : ""
         , (special) ? (isdir ? '/' : ' ') : (executable ? '*' : ' ')
     );
 

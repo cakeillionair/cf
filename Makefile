@@ -34,7 +34,7 @@ CLEAN_LIST     := \
 	$(TARGET_DEBUG) \
 	$(DISTCLEAN_LIST)
 
-default: makedir all debug
+default: makedir all
 
 $(TARGET): $(OBJ)
 	$(CC) $(CFLAGS) -o $@ $^ -I $(INC_PATH)

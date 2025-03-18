@@ -4,6 +4,9 @@
 #define RGB_F(r, g, b) "\x1b[38;2;"#r";"#g";"#b"m"
 #define RGB_B(r, g, b) "\x1b[48;2;"#r";"#g";"#b"m"
 
+#define RESET "\x1b[0m"
+#define BRIGHT "\x1b[1m"
+
 #define BLACK_F   "\x1b[30m"
 #define RED_F     "\x1b[31m"
 #define GREEN_F   "\x1b[32m"
